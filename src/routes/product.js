@@ -1,4 +1,5 @@
 const express = require('express')
+const { Model } = require('mongoose')
 
 const router = express.Router()
 
@@ -8,6 +9,20 @@ router.get('/', async (req, res) => {
     try {
         const products = await Product.find({})
         res.send(products)
+    } catch (error) {
+        console.log(error)
+    }
+})
+
+router.get('/sumPrices', async (req, res) => {
+    try {
+        let sumPrices = await Product.aggregate([
+            { $project: { _id: 0, name: 1, price: 1 } },
+            { $group: { _id: null, sumPrices: { $sum: "$price" } } },
+            { $project: { _id: 0, sumPrices: 1 } },
+        ]);
+        sumPrices = sumPrices[0]
+        res.send(sumPrices)
     } catch (error) {
         console.log(error)
     }

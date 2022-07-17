@@ -60,19 +60,6 @@ router.put('/:id', async (req, res) => {
     }
 })
 
-router.put('/:id', async (req, res) => {
-    let { name } = req.body.checklist
-    let checklist = await Checklist.findById(req.params.id)
-
-    try {
-        await checklist.update({ name })
-        res.redirect('/checklists')
-    } catch (error) {
-        let errors = error.errors
-        res.status(422).render('checklists/edit', { checklist: { ...checklist, errors } })
-    }
-})
-
 router.delete('/:id', async (req, res) => {
     try {
         const product = await Product.findByIdAndDelete(req.params.id)

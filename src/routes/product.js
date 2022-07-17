@@ -1,5 +1,5 @@
 const express = require('express')
-const { Model } = require('mongoose')
+const { create } = require('../models/product')
 
 const router = express.Router()
 
@@ -7,7 +7,7 @@ const Product = require('../models/product')
 
 router.get('/', async (req, res) => {
     try {
-        const products = await Product.find({})
+        const products = await Product.find()
         res.send(products)
     } catch (error) {
         console.log(error)
@@ -40,9 +40,8 @@ router.get('/:id', async (req, res) => {
 
 router.post('/', async (req, res) => {
     const { name, price } = req.body
-    const product = new Product({ name, price })
     try {
-        await product.save()
+        const product = await Product.create({ name, price })
         res.send(product)
     } catch (error) {
         console.log(error)

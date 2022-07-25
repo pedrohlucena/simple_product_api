@@ -7,7 +7,7 @@ const Store = require('../models/store')
 
 router.get('/', async (req, res) => {
     try {
-        const stores = await Store.find().select('-__v')
+        const stores = await Store.find()
         res.send(stores)
     } catch (error) {
         console.log(error)
@@ -34,7 +34,7 @@ router.get('/:id/sumPrices', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
     try {
-        const store = await Store.findById(req.params.id).select('-__v')
+        const store = await Store.findById(req.params.id)
         res.send(store)
     } catch (error) {
         console.log(error)
@@ -56,10 +56,13 @@ router.post('/', async (req, res) => {
 })
 
 router.post('/:id', async (req, res) => {
-    const { name, price } = req.body
     const store = await Store.findById(req.params.id)
+    const products = req.body.products
+
     try {
-        store.products.push({ name, price })
+        products.forEach(product => {
+            store.products.push(product)
+        });
         await store.save()
         res.send(store)
     } catch (error) {
@@ -116,9 +119,5 @@ router.delete('/:storeId/:productId', async (req, res) => {
         res.send({ error: 'Erro ao deletar o produto loja' })
     }
 })
-
-/*
-.select('-__v')
-*/
 
 module.exports = router

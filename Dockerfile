@@ -2,10 +2,10 @@ FROM node:16
 
 WORKDIR /usr/src/app
 
-COPY simple_product_api/package*.json ./
+COPY app/package*.json ./
 RUN npm install
 
-COPY ./simple_product_api/ .
+COPY ./app/ .
 
 EXPOSE 3003
 
